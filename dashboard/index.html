@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Lead SaaS Dashboard</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    .lead { border: 1px solid #ddd; padding: 10px; margin: 10px 0; }
+    .HOT { background: #ffdddd; }
+    .WARM { background: #fff3cd; }
+    .COLD { background: #e2e3e5; }
+  </style>
+</head>
+<body>
+
+<h1>Lead Dashboard</h1>
+
+<div id="stats"></div>
+<div id="leads"></div>
+
+<script>
+async function loadData() {
+  const res = await fetch("http://localhost:3000/leads");
+  const leads = await res.json();
+
+  const statsRes = await fetch("http://localhost:3000/stats");
+  const stats = await statsRes.json();
+
+  document.getElementById("stats").innerHTML = `
+    <h3>Total: ${stats.total} | HOT: ${stats.hot} | WARM: ${stats.warm} | COLD: ${stats.cold}</h3>
+  `;
+
+  document.getElementById("leads").innerHTML = leads.map(l => `
+    <div class="lead ${l.score}">
+      <b>${l.title}</b><br/>
+      <a href="${l.url}" target="_blank">${l.url}</a><br/>
+      <b>Score:</b> ${l.score}<br/>
+      <b>Emails:</b> ${(l.emails || []).join(", ")}<br/>
+      <b>Phones:</b> ${(l.phones || []).join(", ")}
+    </div>
+  `).join("");
+}
+
+loadData();
+setInterval(loadData, 5000);
+</script>
+
+</body>
+</html>
