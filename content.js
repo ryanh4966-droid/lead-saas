@@ -1,8 +1,7 @@
 console.log("Lead SaaS extension active");
-
 async function sendLead(lead) {
   try {
-    await fetch("http://localhost:3000/lead", {
+    await fetch(https://lead-saas.onrender.com/lead {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(lead)
